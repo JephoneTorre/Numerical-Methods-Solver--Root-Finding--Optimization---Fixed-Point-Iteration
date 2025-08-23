@@ -47,7 +47,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100" style={{ fontFamily: 'Lufga, sans-serif' }}>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-20.5 shadow-md z-50">
+      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2.5 shadow-md z-50">
         <button
           onClick={() => setActiveTab("home")}
           className={`font-semibold ${activeTab === "home" ? "text-yellow-400" : "hover:text-yellow-300"}`}
@@ -70,20 +70,27 @@ export default function HomePage() {
 
       {/* Main content */}
       <div className="pt-28 max-w-6xl mx-auto p-4 text-green-900">
+        {/* Home Tab */}
         {activeTab === "home" && (
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Welcome to the Numerical Methods App</h1>
-            <p>Click on the Calculator tab to start solving functions using Root-Finding, Optimization, or Fixed-Point Iteration.</p>
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Welcome to the Numerical Methods App</h1>
+            <p className="text-lg md:text-xl text-green-900">
+              Click on the Calculator tab to start solving functions using Root-Finding, Optimization, or Fixed-Point Iteration.
+            </p>
           </div>
         )}
 
+        {/* About Tab */}
         {activeTab === "about" && (
-          <div>
-            <h1 className="text-3xl font-bold mb-4">About Us</h1>
-            <p>This app was built using Next.js, React, and Tailwind CSS. It helps you compute numerical solutions for functions and export results with formulas.</p>
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Us</h1>
+            <p className="text-lg md:text-xl text-green-900">
+              This app was built using Next.js, React, and Tailwind CSS. It helps you compute numerical solutions for functions and export results with formulas.
+            </p>
           </div>
         )}
 
+        {/* Calculator Tab */}
         {activeTab === "calculator" && (
           <div>
             <h1 className="text-2xl font-bold mb-4">Numerical Methods Calculator</h1>
@@ -175,7 +182,7 @@ export default function HomePage() {
                 </table>
 
                 <button className="bg-green-500 text-white p-2 rounded mt-4"
-                  onClick={() => exportToExcel(mode, result.iterations)}>
+                  onClick={() => exportToExcel(result.iterations, result.derivative, formulaOnly, parseFloat(tolerance), mode)}>
                   Export to Excel
                 </button>
               </div>
