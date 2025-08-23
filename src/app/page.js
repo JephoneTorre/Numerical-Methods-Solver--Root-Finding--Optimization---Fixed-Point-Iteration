@@ -5,6 +5,11 @@ import { evaluate } from "mathjs";
 import { runRootFinding, runOptimization, runFixedPoint, getDerivative } from "../../lib/mathUtils";
 import { exportToExcel } from "../../lib/excelUtils";
 
+function formatValue(v) {
+  if (typeof v === "number") return Math.round(v * 1e6) / 1e6;
+  return v;
+}
+
 export default function HomePage() {
   const [func, setFunc] = useState("8*e^(1-x) + 7*log(x)");
   const [a, setA] = useState("1");
@@ -23,17 +28,21 @@ export default function HomePage() {
       const derivativeVal = getDerivative(func);
       let output;
 
+      const start = parseFloat(a);
+      const end = parseFloat(b);
+
       if (mode === "root") {
-        const start = parseFloat(a);
-        const end = parseFloat(b);
         const fa = evaluate(func, { x: start });
         const fb = evaluate(func, { x: end });
-        if (fa * fb > 0) output = runOptimization(func, start, end, parseFloat(tolerance));
-        else output = runRootFinding(func, start, end, parseFloat(tolerance));
+        if (fa * fb > 0) {
+          output = runOptimization(func, start, end, parseFloat(tolerance));
+        } else {
+          output = runRootFinding(func, start, end, parseFloat(tolerance));
+        }
       } else if (mode === "optimal") {
-        output = runOptimization(func, parseFloat(a), parseFloat(b), parseFloat(tolerance));
+        output = runOptimization(func, start, end, parseFloat(tolerance));
       } else {
-        output = runFixedPoint(func, parseFloat(a), parseFloat(tolerance));
+        output = runFixedPoint(func, start, parseFloat(tolerance));
       }
 
       setResult({ ...output, derivative: derivativeVal });
@@ -113,18 +122,18 @@ export default function HomePage() {
                 <tr key={it.iter}>
                   <td className="border p-1">{it.iter}</td>
                   {mode === "fixed" ? <>
-                    <td className="border p-1">{it.pi}</td>
-                    <td className="border p-1">{it.gpi}</td>
-                    <td className="border p-1">{it.diff}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.pi.formula : formatValue(it.pi.value)}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.gpi.formula : formatValue(it.gpi.value)}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.diff.formula : formatValue(it.diff.value)}</td>
                   </> : <>
-                    <td className="border p-1">{it.a}</td>
-                    <td className="border p-1">{it.b}</td>
-                    <td className="border p-1">{it.c}</td>
-                    <td className="border p-1">{it.fc}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.a.formula : formatValue(it.a.value)}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.b.formula : formatValue(it.b.value)}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.c.formula : formatValue(it.c.value)}</td>
+                    <td className="border p-1">{showFormulaPreview ? it.fc.formula : formatValue(it.fc.value)}</td>
                     {mode === "optimal" && <>
-                      <td className="border p-1">{it.fa}</td>
-                      <td className="border p-1">{it.fb}</td>
-                      <td className="border p-1">{Math.abs(it.b - it.a)}</td>
+                      <td className="border p-1">{showFormulaPreview ? it.fa.formula : formatValue(it.fa.value)}</td>
+                      <td className="border p-1">{showFormulaPreview ? it.fb.formula : formatValue(it.fb.value)}</td>
+                      <td className="border p-1">{showFormulaPreview ? it.diff.formula : formatValue(it.diff.value)}</td>
                     </>}
                   </>}
                   {showTolCheck && <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>}
