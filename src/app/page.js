@@ -47,7 +47,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100" style={{ fontFamily: 'Lufga, sans-serif' }}>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2.5 shadow-md z-50">
+      <header className="fixed top-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-20.5 shadow-md z-50">
         <button
           onClick={() => setActiveTab("home")}
           className={`font-semibold ${activeTab === "home" ? "text-yellow-400" : "hover:text-yellow-300"}`}
