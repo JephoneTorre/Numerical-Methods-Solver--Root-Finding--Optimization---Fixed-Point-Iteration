@@ -45,7 +45,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100" style={{ fontFamily: 'Lufga, sans-serif' }}>
       {/* Header */}
       <header className="fixed top-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2.5 shadow-md z-50">
         <button
@@ -69,23 +69,23 @@ export default function HomePage() {
       </header>
 
       {/* Main content */}
-      <div className="pt-28 max-w-6xl mx-auto p-4">
+      <div className="pt-28 max-w-6xl mx-auto p-4 text-green-900">
         {activeTab === "home" && (
-          <div className="text-green-900 text-center">
+          <div className="text-center">
             <h1 className="text-3xl font-bold mb-4">Welcome to the Numerical Methods App</h1>
             <p>Click on the Calculator tab to start solving functions using Root-Finding, Optimization, or Fixed-Point Iteration.</p>
           </div>
         )}
 
         {activeTab === "about" && (
-          <div className="text-green-900">
+          <div>
             <h1 className="text-3xl font-bold mb-4">About Us</h1>
             <p>This app was built using Next.js, React, and Tailwind CSS. It helps you compute numerical solutions for functions and export results with formulas.</p>
           </div>
         )}
 
         {activeTab === "calculator" && (
-          <div className="text-green-900">
+          <div>
             <h1 className="text-2xl font-bold mb-4">Numerical Methods Calculator</h1>
 
             <label className="font-semibold">Calculation Type:</label>
