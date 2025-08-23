@@ -16,7 +16,6 @@ export default function HomePage() {
   const [showFormulaPreview, setShowFormulaPreview] = useState(true);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-
   const [activeTab, setActiveTab] = useState("home"); // home, calculator, about
 
   const handleCalculate = () => {
@@ -72,21 +71,21 @@ export default function HomePage() {
       {/* Main content */}
       <div className="pt-28 max-w-6xl mx-auto p-4">
         {activeTab === "home" && (
-          <div className="text-center text-gray-700">
+          <div className="text-green-900 text-center">
             <h1 className="text-3xl font-bold mb-4">Welcome to the Numerical Methods App</h1>
             <p>Click on the Calculator tab to start solving functions using Root-Finding, Optimization, or Fixed-Point Iteration.</p>
           </div>
         )}
 
         {activeTab === "about" && (
-          <div className="text-gray-700">
+          <div className="text-green-900">
             <h1 className="text-3xl font-bold mb-4">About Us</h1>
             <p>This app was built using Next.js, React, and Tailwind CSS. It helps you compute numerical solutions for functions and export results with formulas.</p>
           </div>
         )}
 
         {activeTab === "calculator" && (
-          <div>
+          <div className="text-green-900">
             <h1 className="text-2xl font-bold mb-4">Numerical Methods Calculator</h1>
 
             <label className="font-semibold">Calculation Type:</label>
