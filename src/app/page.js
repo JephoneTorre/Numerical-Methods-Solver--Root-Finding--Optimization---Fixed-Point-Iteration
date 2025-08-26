@@ -16,7 +16,7 @@ export default function HomePage() {
   const [showFormulaPreview, setShowFormulaPreview] = useState(true);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState("home"); // home, calculator, about
 
   const handleCalculate = () => {
     try {
@@ -47,20 +47,25 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100" style={{ fontFamily: 'Lufga, sans-serif' }}>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full bg-[#064e3b] text-white p-4 flex justify-end space-x-20 shadow-md z-50">
-        {["home", "calculator", "about"].map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`font-semibold border-b-2 ${
-              activeTab === tab
-                ? "text-[#bbf7d0] border-white"
-                : "border-transparent hover:text-[#bbf7d0] hover:border-white"
-            }`}
-          >
-            {tab === "home" ? "Home" : tab === "calculator" ? "Calculator" : "About Us"}
-          </button>
-        ))}
+      <header className="fixed top-0 left-0 w-full bg-[#064e3b] text-white p-4 flex justify-center space-x-20 shadow-md z-50">
+        <button
+          onClick={() => setActiveTab("home")}
+          className={`font-semibold border-b-2 ${activeTab === "home" ? "text-green-100 border-white" : "border-transparent hover:text-green-100 hover:border-white"}`}
+        >
+          Home
+        </button>
+        <button
+          onClick={() => setActiveTab("calculator")}
+          className={`font-semibold border-b-2 ${activeTab === "calculator" ? "text-green-100 border-white" : "border-transparent hover:text-green-100 hover:border-white"}`}
+        >
+          Calculator
+        </button>
+        <button
+          onClick={() => setActiveTab("about")}
+          className={`font-semibold border-b-2 ${activeTab === "about" ? "text-green-100 border-white" : "border-transparent hover:text-green-100 hover:border-white"}`}
+        >
+          About Us
+        </button>
       </header>
 
       {/* Main content */}
