@@ -109,15 +109,25 @@ export default function HomePage() {
             <label className="font-semibold">Function f(x):</label>
             <input className="border p-2 w-full mb-2" value={func} onChange={e => setFunc(e.target.value)} />
 
+            {/* Interval Inputs with Label */}
             {mode !== "fixed" && (
-              <div className="flex gap-2 mb-2">
-                <input className="border p-2 w-full" value={a} onChange={e => setA(e.target.value)} placeholder="a" />
-                <input className="border p-2 w-full" value={b} onChange={e => setB(e.target.value)} placeholder="b" />
+              <div className="mb-2">
+                <label className="font-semibold block mb-1">Interval:</label>
+                <div className="flex gap-2">
+                  <input
+                    className="border p-2 w-full"
+                    value={a}
+                    onChange={e => setA(e.target.value)}
+                    placeholder="a"
+                  />
+                  <input
+                    className="border p-2 w-full"
+                    value={b}
+                    onChange={e => setB(e.target.value)}
+                    placeholder="b"
+                  />
+                </div>
               </div>
-            )}
-
-            {mode === "fixed" && (
-              <input className="border p-2 w-full mb-2" value={a} onChange={e => setA(e.target.value)} placeholder="Initial guess p0" />
             )}
 
             <label className="font-semibold">Tolerance:</label>
