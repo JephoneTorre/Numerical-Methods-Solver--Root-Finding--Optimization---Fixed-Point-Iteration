@@ -74,8 +74,12 @@ export default function HomePage() {
         {activeTab === "home" && (
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">Welcome to the Numerical Methods App</h1>
+            <p className="text-lg md:text-xl text-green-900 mb-4">
+              This web application provides an interactive way to explore numerical methods such as Bisection, Interval Halving, and Fixed-Point Iteration. 
+              Input your function, run calculations step by step, and view detailed results or export them to Excel.
+            </p>
             <p className="text-lg md:text-xl text-green-900">
-              Click on the Calculator tab to start solving functions using Root-Finding, Optimization, or Fixed-Point Iteration.
+              Click on the Calculator tab to start solving!
             </p>
           </div>
         )}
