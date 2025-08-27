@@ -1,5 +1,5 @@
-import HomeContent from "./HomeContent";
+import CalculatorContent from "./CalculatorContent";
 
-export default function HomePage() {
-  return <HomeContent />;
+export default function CalculatorPage() {
+  return <CalculatorContent />;
 }

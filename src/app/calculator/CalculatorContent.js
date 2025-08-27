@@ -5,7 +5,6 @@ import { evaluate } from "mathjs";
 import { runRootFinding, runOptimization, runFixedPoint, getDerivative } from "../../../lib/mathUtils";
 import { exportToExcel } from "../../../lib/excelUtils";
 
-
 export default function CalculatorContent() {
   const [func, setFunc] = useState("8*e^(1-x) + 7*log(x)");
   const [a, setA] = useState("1");
