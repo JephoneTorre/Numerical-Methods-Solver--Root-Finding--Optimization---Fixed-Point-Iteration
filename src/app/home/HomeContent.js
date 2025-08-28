@@ -15,11 +15,6 @@ export default function HomeContent() {
         Click the button below to start solving!
       </p>
 
-      <Link href="/calculator">
-        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
-          Calculate
-        </button>
-      </Link>
     </div>
   );
 }
