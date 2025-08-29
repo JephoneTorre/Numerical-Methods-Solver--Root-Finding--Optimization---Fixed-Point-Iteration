@@ -20,7 +20,7 @@ export default function HomeContent() {
           </p>
         </div>
 
-        <div>
+        <div className="mt-20">
           <h2 className="text-4xl font-semibold mb-5">Why Numerical Methods?</h2>
           <p className="text-lg md:text-xl">
             Numerical methods help approximate solutions to equations, optimize functions, 
