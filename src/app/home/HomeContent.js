@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function HomeContent() {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center p-10">
       <h1 className="text-6xl md:text-7xl font-bold mb-12">
@@ -9,6 +13,14 @@ export default function HomeContent() {
       <p className="text-xl md:text-2xl text-green-900 mb-10 max-w-4xl">
         Explore numerical methods like Bisection, Interval Halving, and Fixed-Point Iteration.
       </p>
+
+      {/* Button to calculator */}
+      <button
+        onClick={() => router.push("/calculator")}
+        className="bg-blue-600 text-white text-lg px-8 py-4 rounded-lg hover:bg-blue-700 transition mb-32"
+      >
+        Go to Calculator
+      </button>
 
       <div className="mt-40 max-w-5xl text-left text-gray-800 space-y-12">
         <div>
