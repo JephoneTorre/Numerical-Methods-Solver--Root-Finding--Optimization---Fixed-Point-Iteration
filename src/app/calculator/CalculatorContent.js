@@ -68,6 +68,7 @@ export default function CalculatorContent() {
         <option value="optimal">Optimization (Interval Halving)</option>
         <option value="gss">Optimization (Golden Section Search)</option>
         <option value="fixed">Fixed Point Iteration g(x)</option>
+        <option value="fixed">Fibonacci method</option>
       </select>
 
       <label className="font-semibold">Function f(x):</label>
