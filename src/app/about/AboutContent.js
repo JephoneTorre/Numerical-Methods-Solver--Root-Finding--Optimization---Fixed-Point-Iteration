@@ -23,7 +23,7 @@ export default function AboutContent() {
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="text-lg font-medium">Jephone(Back-end)</span>
+          <span className="text-lg font-medium">Jephone(Back-end/front-end)</span>
         </div>
 
         {/* Box 2 */}
