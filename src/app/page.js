@@ -3,7 +3,8 @@
 import { useState } from "react";
 import HomeContent from "./home/HomeContent";
 import AboutContent from "./about/AboutContent";
-import CalculatorContent from "./calculator/CalculatorContent";
+import CalculatorContent from './calculator/CalculatorContent';
+
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("home"); // home, calculator, about
