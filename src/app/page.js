@@ -5,8 +5,7 @@ import HomeContent from "./home/HomeContent";
 import AboutContent from "./about/AboutContent";
 import CalculatorContent from './calculator/CalculatorContent';
 
-
-export default function HomePage() {
+export default function MainPage() { // <--- renamed to avoid conflict
   const [activeTab, setActiveTab] = useState("home"); // home, calculator, about
 
   return (
