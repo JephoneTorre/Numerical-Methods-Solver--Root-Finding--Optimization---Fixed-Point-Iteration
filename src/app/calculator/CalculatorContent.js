@@ -6,7 +6,7 @@ import {
   runRootFinding,
   runOptimization,
   runFixedPoint,
-  runGSS, // <-- Add this in mathUtils.js
+  runGSS,
   getDerivative
 } from "../../../lib/mathUtils";
 import { exportToExcel } from "../../../lib/excelUtils";
@@ -17,9 +17,6 @@ export default function CalculatorContent() {
   const [b, setB] = useState("2");
   const [tolerance, setTolerance] = useState("0.0001");
   const [mode, setMode] = useState("root");
-  const [showTolCheck, setShowTolCheck] = useState(true);
-  const [formulaOnly, setFormulaOnly] = useState(false);
-  const [showFormulaPreview, setShowFormulaPreview] = useState(true);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
@@ -29,22 +26,23 @@ export default function CalculatorContent() {
       const derivativeVal = getDerivative(func);
       let output;
 
+      const start = parseFloat(a);
+      const end = parseFloat(b);
+      const tol = parseFloat(tolerance);
+
       if (mode === "root") {
-        const start = parseFloat(a);
-        const end = parseFloat(b);
         const fa = evaluate(func, { x: start });
         const fb = evaluate(func, { x: end });
-        if (fa * fb > 0) {
-          output = runOptimization(func, start, end, parseFloat(tolerance));
-        } else {
-          output = runRootFinding(func, start, end, parseFloat(tolerance));
-        }
+        output =
+          fa * fb > 0
+            ? runOptimization(func, start, end, tol)
+            : runRootFinding(func, start, end, tol);
       } else if (mode === "optimal") {
-        output = runOptimization(func, parseFloat(a), parseFloat(b), parseFloat(tolerance));
+        output = runOptimization(func, start, end, tol);
       } else if (mode === "gss") {
-        output = runGSS(func, parseFloat(a), parseFloat(b), parseFloat(tolerance));
+        output = runGSS(func, start, end, tol);
       } else {
-        output = runFixedPoint(func, parseFloat(a), parseFloat(tolerance));
+        output = runFixedPoint(func, start, tol);
       }
 
       setResult({ ...output, derivative: derivativeVal });
@@ -62,23 +60,21 @@ export default function CalculatorContent() {
       <select
         className="border p-2 w-full mb-2"
         value={mode}
-        onChange={e => setMode(e.target.value)}
+        onChange={(e) => setMode(e.target.value)}
       >
         <option value="root">Root Finding (Bisection)</option>
         <option value="optimal">Optimization (Interval Halving)</option>
         <option value="gss">Optimization (Golden Section Search)</option>
         <option value="fixed">Fixed Point Iteration g(x)</option>
-        <option value="fixed">Fibonacci method</option>
       </select>
 
       <label className="font-semibold">Function f(x):</label>
       <input
         className="border p-2 w-full mb-2"
         value={func}
-        onChange={e => setFunc(e.target.value)}
+        onChange={(e) => setFunc(e.target.value)}
       />
 
-      {/* Interval Inputs */}
       {mode !== "fixed" && (
         <div className="mb-2">
           <label className="font-semibold block mb-1">Interval:</label>
@@ -86,13 +82,13 @@ export default function CalculatorContent() {
             <input
               className="border p-2 w-full"
               value={a}
-              onChange={e => setA(e.target.value)}
+              onChange={(e) => setA(e.target.value)}
               placeholder="a"
             />
             <input
               className="border p-2 w-full"
               value={b}
-              onChange={e => setB(e.target.value)}
+              onChange={(e) => setB(e.target.value)}
               placeholder="b"
             />
           </div>
@@ -103,32 +99,8 @@ export default function CalculatorContent() {
       <input
         className="border p-2 w-full mb-2"
         value={tolerance}
-        onChange={e => setTolerance(e.target.value)}
+        onChange={(e) => setTolerance(e.target.value)}
       />
-
-      <div className="flex gap-2 mb-4">
-        <label>
-          <input
-            type="checkbox"
-            checked={showTolCheck}
-            onChange={() => setShowTolCheck(!showTolCheck)}
-          /> Show tolerance check
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={formulaOnly}
-            onChange={() => setFormulaOnly(!formulaOnly)}
-          /> Export formula-only Excel
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={showFormulaPreview}
-            onChange={() => setShowFormulaPreview(!showFormulaPreview)}
-          /> Show formulas in table
-        </label>
-      </div>
 
       <button
         className="bg-blue-500 text-white p-2 rounded mb-4"
@@ -142,84 +114,74 @@ export default function CalculatorContent() {
       {result && (
         <div className="mt-4 overflow-x-auto">
           {mode !== "fixed" && (
-            <p><strong>Derivative f'(x):</strong> {result.derivative}</p>
-          )}
-          {mode === "fixed" && (
-            <p><strong>Used g(x):</strong> {result.gFunc}</p>
+            <p>
+              <strong>Derivative f'(x):</strong> {result.derivative}
+            </p>
           )}
 
+          {/* Iteration Table */}
           <table className="border-collapse border border-gray-500 mt-4 w-full text-sm">
             <thead>
               <tr>
-                <th className="border p-1">Iteration</th>
+                <th className="border p-1">Iter</th>
                 {mode === "fixed" ? (
                   <>
                     <th className="border p-1">pᵢ</th>
                     <th className="border p-1">g(pᵢ)</th>
                     <th className="border p-1">|pᵢ₊₁ - pᵢ|</th>
+                    <th className="border p-1">Within Tol</th>
                   </>
                 ) : mode === "gss" ? (
                   <>
                     <th className="border p-1">a</th>
                     <th className="border p-1">b</th>
-                    <th className="border p-1">x1</th>
-                    <th className="border p-1">x2</th>
-                    <th className="border p-1">f(x1)</th>
-                    <th className="border p-1">f(x2)</th>
-                    {showTolCheck && <th className="border p-1">Within Tol?</th>}
+                    <th className="border p-1">a'</th>
+                    <th className="border p-1">b'</th>
+                    <th className="border p-1">f(a')</th>
+                    <th className="border p-1">f(b')</th>
+                    <th className="border p-1">Within Tol</th>
                   </>
                 ) : (
                   <>
                     <th className="border p-1">a</th>
                     <th className="border p-1">b</th>
                     <th className="border p-1">c</th>
-                    <th className="border p-1">{mode === "root" ? "f(c)" : "h(c)"}</th>
-                    {mode === "optimal" && (
-                      <>
-                        <th className="border p-1">h(a)</th>
-                        <th className="border p-1">h(b)</th>
-                        <th className="border p-1">|b-a|</th>
-                      </>
-                    )}
-                    {showTolCheck && <th className="border p-1">Within Tol?</th>}
+                    <th className="border p-1">f(c)</th>
+                    <th className="border p-1">|b-a|</th>
+                    <th className="border p-1">Within Tol</th>
                   </>
                 )}
               </tr>
             </thead>
             <tbody>
-              {result.iterations.map((it) => (
+              {result.iterations.slice(0, 20).map((it) => (
                 <tr key={it.iter}>
                   <td className="border p-1">{it.iter}</td>
                   {mode === "fixed" ? (
                     <>
-                      <td className="border p-1">{showFormulaPreview ? it.pi.formula : it.pi.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.gpi.formula : it.gpi.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.diff.formula : it.diff.value}</td>
+                      <td className="border p-1">{it.pi.value}</td>
+                      <td className="border p-1">{it.gpi.value}</td>
+                      <td className="border p-1">{it.diff.value}</td>
+                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
                     </>
                   ) : mode === "gss" ? (
                     <>
-                      <td className="border p-1">{showFormulaPreview ? it.a.formula : it.a.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.b.formula : it.b.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.x1.formula : it.x1.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.x2.formula : it.x2.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.fx1.formula : it.fx1.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.fx2.formula : it.fx2.value}</td>
-                      {showTolCheck && <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>}
+                      <td className="border p-1">{it.a.value}</td>
+                      <td className="border p-1">{it.b.value}</td>
+                      <td className="border p-1">{it.a1.value}</td>
+                      <td className="border p-1">{it.b1.value}</td>
+                      <td className="border p-1">{it.fa1.value}</td>
+                      <td className="border p-1">{it.fb1.value}</td>
+                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
                     </>
                   ) : (
                     <>
-                      <td className="border p-1">{showFormulaPreview ? it.a.formula : it.a.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.b.formula : it.b.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.c.formula : it.c.value}</td>
-                      <td className="border p-1">{showFormulaPreview ? it.fc.formula : it.fc.value}</td>
-                      {mode === "optimal" && (
-                        <>
-                          <td className="border p-1">{showFormulaPreview ? it.fa.formula : it.fa.value}</td>
-                          <td className="border p-1">{showFormulaPreview ? it.fb.formula : it.fb.value}</td>
-                          <td className="border p-1">{showFormulaPreview ? it.diff.formula : it.diff.value}</td>
-                        </>
-                      )}
-                      {showTolCheck && <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>}
+                      <td className="border p-1">{it.a.value}</td>
+                      <td className="border p-1">{it.b.value}</td>
+                      <td className="border p-1">{it.c.value}</td>
+                      <td className="border p-1">{it.fc.value}</td>
+                      <td className="border p-1">{it.diff?.value ?? Math.abs(it.b.value - it.a.value)}</td>
+                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
                     </>
                   )}
                 </tr>
@@ -233,6 +195,10 @@ export default function CalculatorContent() {
           >
             Export to Excel
           </button>
+
+          {result.iterations.length > 20 && (
+            <p className="text-gray-600 mt-2">Only showing first 20 iterations</p>
+          )}
         </div>
       )}
     </div>
