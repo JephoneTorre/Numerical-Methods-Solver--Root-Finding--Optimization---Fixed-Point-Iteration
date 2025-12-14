@@ -11,7 +11,7 @@ export default function HomeContent() {
         Welcome to the Numerical Methods App
       </h1>
       <p className="text-xl md:text-2xl text-green-900 mb-10 max-w-4xl">
-        Explore numerical methods like Bisection, Interval Halving, and Fixed-Point Iteration.
+        Explore numerical methods like Bisection, Optimization, and Fixed-Point Iteration.
       </p>
 
       {/* Button to calculator */}
