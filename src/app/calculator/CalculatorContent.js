@@ -10,6 +10,7 @@ import {
   getDerivative
 } from "../../../lib/mathUtils";
 import { exportToExcel } from "../../../lib/excelUtils";
+import FunctionPlot from "./FunctionPlot";
 
 export default function CalculatorContent() {
   const [func, setFunc] = useState("8*e^(1-x) + 7*log(x)");
@@ -199,6 +200,18 @@ export default function CalculatorContent() {
           {result.iterations.length > 20 && (
             <p className="text-gray-600 mt-2">Only showing first 20 iterations</p>
           )}
+
+          {/* ---------- Function Plot Section ---------- */}
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">Function Plot</h2>
+            <FunctionPlot
+              func={func}
+              a={parseFloat(a)}
+              b={parseFloat(b)}
+              highlightX={result.root?.value ?? null}
+              iterations={result.iterations}
+            />
+          </div>
         </div>
       )}
     </div>
