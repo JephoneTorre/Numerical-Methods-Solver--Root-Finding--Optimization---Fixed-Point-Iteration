@@ -64,7 +64,7 @@ export default function CalculatorContent() {
         onChange={(e) => setMode(e.target.value)}
       >
         <option value="root">Root Finding (Bisection)</option>
-        <option value="optimal">Optimization (Interval Halving)</option>
+        <option value="optimal">Optimization (Bisection)</option>
         <option value="gss">Optimization (Golden Section Search)</option>
         <option value="fixed">Fixed Point Iteration g(x)</option>
       </select>
