@@ -9,49 +9,48 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState("home");
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: "Lufga, sans-serif" }}>
-      {/* Header */}
-      <header className="fixed top-0 left-0 w-full bg-[#064e3b] text-white p-4 flex justify-center space-x-20 shadow-md z-50">
-        <button
-          onClick={() => setActiveTab("home")}
-          className={`font-semibold border-b-2 ${
-            activeTab === "home"
-              ? "text-green-100 border-white"
-              : "border-transparent hover:text-green-100 hover:border-white"
-          }`}
-        >
-          Home
-        </button>
+    <div className="min-h-screen bg-white font-sans text-gray-900">
+      
+      {/* --- Fixed Header --- */}
+      <header className="fixed top-0 left-0 w-full bg-[#004d40] text-white shadow-lg z-50">
+        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-center space-x-12">
+          
+          {["home", "calculator", "about"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`text-sm font-bold uppercase tracking-wider px-2 py-1 border-b-2 transition-all duration-300 ${
+                activeTab === tab
+                  ? "border-white text-white"
+                  : "border-transparent text-green-200 hover:text-white hover:border-green-300"
+              }`}
+            >
+              {tab === "about" ? "About Us" : tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
 
-        <button
-          onClick={() => setActiveTab("calculator")}
-          className={`font-semibold border-b-2 ${
-            activeTab === "calculator"
-              ? "text-green-100 border-white"
-              : "border-transparent hover:text-green-100 hover:border-white"
-          }`}
-        >
-          Calculator
-        </button>
-
-        <button
-          onClick={() => setActiveTab("about")}
-          className={`font-semibold border-b-2 ${
-            activeTab === "about"
-              ? "text-green-100 border-white"
-              : "border-transparent hover:text-green-100 hover:border-white"
-          }`}
-        >
-          About Us
-        </button>
+        </div>
       </header>
 
-      {/* Content */}
-      <div className="pt-28 max-w-4xl mx-auto p-4 text-green-900">
-        {activeTab === "home" && <HomeContent />}
-        {activeTab === "calculator" && <CalculatorContent />}
-        {activeTab === "about" && <AboutContent />}
-      </div>
+      {/* --- Main Content Area --- */}
+      <main className="pt-24 pb-12 max-w-6xl mx-auto px-6">
+        
+        {/* Pass setActiveTab to HomeContent so the button works! */}
+        {activeTab === "home" && (
+          <HomeContent onNavigate={() => setActiveTab("calculator")} />
+        )}
+
+        {activeTab === "calculator" && (
+          <div className="max-w-4xl mx-auto">
+             <CalculatorContent />
+          </div>
+        )}
+        
+        {activeTab === "about" && (
+          <AboutContent />
+        )}
+        
+      </main>
     </div>
   );
 }
