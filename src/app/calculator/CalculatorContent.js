@@ -53,157 +53,202 @@ export default function CalculatorContent() {
     }
   };
 
+  // Helper class for consistent input styling
+  const inputClass = "w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004d40] focus:border-transparent outline-none transition text-gray-800";
+  const labelClass = "block text-sm font-bold text-gray-700 mb-2";
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Numerical Methods Calculator</h1>
+    <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+      
+      <h1 className="text-3xl font-extrabold mb-8 text-[#004d40] border-b pb-4">
+        Numerical Methods Calculator
+      </h1>
 
-      <label className="font-semibold">Calculation Type:</label>
-      <select
-        className="border p-2 w-full mb-2"
-        value={mode}
-        onChange={(e) => setMode(e.target.value)}
-      >
-        <option value="root">Root Finding (Bisection)</option>
-        <option value="optimal">Optimization (Bisection)</option>
-        <option value="gss">Optimization (Golden Section Search)</option>
-        <option value="fixed">Fixed Point Iteration g(x)</option>
-      </select>
+      <div className="space-y-6">
+        {/* Calculation Type */}
+        <div>
+          <label className={labelClass}>Calculation Type</label>
+          <select
+            className={inputClass}
+            value={mode}
+            onChange={(e) => setMode(e.target.value)}
+          >
+            <option value="root">Root Finding (Bisection)</option>
+            <option value="optimal">Optimization (Bisection)</option>
+            <option value="gss">Optimization (Golden Section Search)</option>
+            <option value="fixed">Fixed Point Iteration g(x)</option>
+          </select>
+        </div>
 
-      <label className="font-semibold">Function f(x):</label>
-      <input
-        className="border p-2 w-full mb-2"
-        value={func}
-        onChange={(e) => setFunc(e.target.value)}
-      />
+        {/* Function Input */}
+        <div>
+          <label className={labelClass}>Function f(x)</label>
+          <input
+            className={inputClass}
+            value={func}
+            onChange={(e) => setFunc(e.target.value)}
+            placeholder="e.g., x^2 - 4"
+          />
+        </div>
 
-      {mode !== "fixed" && (
-        <div className="mb-2">
-          <label className="font-semibold block mb-1">Interval:</label>
-          <div className="flex gap-2">
-            <input
-              className="border p-2 w-full"
-              value={a}
-              onChange={(e) => setA(e.target.value)}
-              placeholder="a"
-            />
-            <input
-              className="border p-2 w-full"
-              value={b}
-              onChange={(e) => setB(e.target.value)}
-              placeholder="b"
-            />
+        {/* Interval Inputs (Grid Layout) */}
+        {mode !== "fixed" && (
+          <div>
+            <label className={labelClass}>Interval [a, b]</label>
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                className={inputClass}
+                value={a}
+                onChange={(e) => setA(e.target.value)}
+                placeholder="Start (a)"
+              />
+              <input
+                className={inputClass}
+                value={b}
+                onChange={(e) => setB(e.target.value)}
+                placeholder="End (b)"
+              />
+            </div>
           </div>
+        )}
+
+        {/* Tolerance */}
+        <div>
+          <label className={labelClass}>Tolerance</label>
+          <input
+            className={inputClass}
+            value={tolerance}
+            onChange={(e) => setTolerance(e.target.value)}
+            placeholder="e.g., 0.0001"
+          />
+        </div>
+
+        {/* Calculate Button */}
+        <button
+          className="w-full bg-[#004d40] text-white font-bold text-lg py-4 rounded-lg shadow-md hover:bg-[#00382e] hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+          onClick={handleCalculate}
+        >
+          Calculate Solution
+        </button>
+      </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg flex items-center">
+          <span className="mr-2">⚠️</span> {error}
         </div>
       )}
 
-      <label className="font-semibold">Tolerance:</label>
-      <input
-        className="border p-2 w-full mb-2"
-        value={tolerance}
-        onChange={(e) => setTolerance(e.target.value)}
-      />
-
-      <button
-        className="bg-blue-500 text-white p-2 rounded mb-4"
-        onClick={handleCalculate}
-      >
-        Calculate
-      </button>
-
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-
+      {/* Results Section */}
       {result && (
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-10 border-t pt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Results</h2>
+
           {mode !== "fixed" && (
-            <p>
-              <strong>Derivative f'(x):</strong> {result.derivative}
-            </p>
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6 text-blue-900">
+              <strong>Derivative f'(x):</strong> <span className="font-mono">{result.derivative}</span>
+            </div>
           )}
 
           {/* Iteration Table */}
-          <table className="border-collapse border border-gray-500 mt-4 w-full text-sm">
-            <thead>
-              <tr>
-                <th className="border p-1">Iter</th>
-                {mode === "fixed" ? (
-                  <>
-                    <th className="border p-1">pᵢ</th>
-                    <th className="border p-1">g(pᵢ)</th>
-                    <th className="border p-1">|pᵢ₊₁ - pᵢ|</th>
-                    <th className="border p-1">Within Tol</th>
-                  </>
-                ) : mode === "gss" ? (
-                  <>
-                    <th className="border p-1">a</th>
-                    <th className="border p-1">b</th>
-                    <th className="border p-1">a'</th>
-                    <th className="border p-1">b'</th>
-                    <th className="border p-1">f(a')</th>
-                    <th className="border p-1">f(b')</th>
-                    <th className="border p-1">Within Tol</th>
-                  </>
-                ) : (
-                  <>
-                    <th className="border p-1">a</th>
-                    <th className="border p-1">b</th>
-                    <th className="border p-1">c</th>
-                    <th className="border p-1">f(c)</th>
-                    <th className="border p-1">|b-a|</th>
-                    <th className="border p-1">Within Tol</th>
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {result.iterations.slice(0, 20).map((it) => (
-                <tr key={it.iter}>
-                  <td className="border p-1">{it.iter}</td>
+          <div className="overflow-x-auto rounded-lg shadow border border-gray-200 mb-6">
+            <table className="w-full text-sm text-left text-gray-600">
+              <thead className="text-xs text-white uppercase bg-[#004d40]">
+                <tr>
+                  <th className="px-6 py-3">Iter</th>
                   {mode === "fixed" ? (
                     <>
-                      <td className="border p-1">{it.pi.value}</td>
-                      <td className="border p-1">{it.gpi.value}</td>
-                      <td className="border p-1">{it.diff.value}</td>
-                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
+                      <th className="px-6 py-3">pᵢ</th>
+                      <th className="px-6 py-3">g(pᵢ)</th>
+                      <th className="px-6 py-3">|pᵢ₊₁ - pᵢ|</th>
+                      <th className="px-6 py-3">Within Tol</th>
                     </>
                   ) : mode === "gss" ? (
                     <>
-                      <td className="border p-1">{it.a.value}</td>
-                      <td className="border p-1">{it.b.value}</td>
-                      <td className="border p-1">{it.a1.value}</td>
-                      <td className="border p-1">{it.b1.value}</td>
-                      <td className="border p-1">{it.fa1.value}</td>
-                      <td className="border p-1">{it.fb1.value}</td>
-                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
+                      <th className="px-6 py-3">a</th>
+                      <th className="px-6 py-3">b</th>
+                      <th className="px-6 py-3">a'</th>
+                      <th className="px-6 py-3">b'</th>
+                      <th className="px-6 py-3">f(a')</th>
+                      <th className="px-6 py-3">f(b')</th>
+                      <th className="px-6 py-3">Within Tol</th>
                     </>
                   ) : (
                     <>
-                      <td className="border p-1">{it.a.value}</td>
-                      <td className="border p-1">{it.b.value}</td>
-                      <td className="border p-1">{it.c.value}</td>
-                      <td className="border p-1">{it.fc.value}</td>
-                      <td className="border p-1">{it.diff?.value ?? Math.abs(it.b.value - it.a.value)}</td>
-                      <td className="border p-1">{it.withinTol ? "TRUE" : "FALSE"}</td>
+                      <th className="px-6 py-3">a</th>
+                      <th className="px-6 py-3">b</th>
+                      <th className="px-6 py-3">c</th>
+                      <th className="px-6 py-3">f(c)</th>
+                      <th className="px-6 py-3">|b-a|</th>
+                      <th className="px-6 py-3">Within Tol</th>
                     </>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {result.iterations.slice(0, 20).map((it, index) => (
+                  <tr 
+                    key={it.iter} 
+                    className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-green-50 transition-colors`}
+                  >
+                    <td className="px-6 py-4 font-medium text-gray-900">{it.iter}</td>
+                    {mode === "fixed" ? (
+                      <>
+                        <td className="px-6 py-4">{it.pi.value}</td>
+                        <td className="px-6 py-4">{it.gpi.value}</td>
+                        <td className="px-6 py-4">{it.diff.value}</td>
+                        <td className="px-6 py-4">
+                          {it.withinTol ? <span className="text-green-600 font-bold">YES</span> : "NO"}
+                        </td>
+                      </>
+                    ) : mode === "gss" ? (
+                      <>
+                        <td className="px-6 py-4">{it.a.value}</td>
+                        <td className="px-6 py-4">{it.b.value}</td>
+                        <td className="px-6 py-4">{it.a1.value}</td>
+                        <td className="px-6 py-4">{it.b1.value}</td>
+                        <td className="px-6 py-4">{it.fa1.value}</td>
+                        <td className="px-6 py-4">{it.fb1.value}</td>
+                        <td className="px-6 py-4">
+                           {it.withinTol ? <span className="text-green-600 font-bold">YES</span> : "NO"}
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="px-6 py-4">{it.a.value}</td>
+                        <td className="px-6 py-4">{it.b.value}</td>
+                        <td className="px-6 py-4">{it.c.value}</td>
+                        <td className="px-6 py-4">{it.fc.value}</td>
+                        <td className="px-6 py-4">{it.diff?.value ?? Math.abs(it.b.value - it.a.value)}</td>
+                        <td className="px-6 py-4">
+                           {it.withinTol ? <span className="text-green-600 font-bold">YES</span> : "NO"}
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <button
-            className="bg-green-500 text-white p-2 rounded mt-4"
-            onClick={() => exportToExcel(mode, result.iterations)}
-          >
-            Export to Excel
-          </button>
-
-          {result.iterations.length > 20 && (
-            <p className="text-gray-600 mt-2">Only showing first 20 iterations</p>
-          )}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+             {result.iterations.length > 20 && (
+                <p className="text-gray-500 italic text-sm">
+                  Showing first 20 iterations only
+                </p>
+              )}
+            <button
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 shadow transition font-semibold"
+              onClick={() => exportToExcel(mode, result.iterations)}
+            >
+              📥 Export to Excel
+            </button>
+          </div>
 
           {/* ---------- Function Plot Section ---------- */}
-          <div className="mt-8">
-            <h2 className="text-xl font-bold mb-4">Function Plot</h2>
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <h2 className="text-xl font-bold text-[#004d40] mb-4">Function Visualization</h2>
             <FunctionPlot
               func={func}
               a={parseFloat(a)}
