@@ -7,11 +7,16 @@ export default function HomeContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center p-10">
-      <h1 className="text-6xl md:text-7xl font-bold mb-12">
-        Welcome to the Numerical Methods App
+      <h1 className="text-6xl md:text-6xl font-bold mb-12">
+        Bisection Method for Optimization Application
       </h1>
-      <p className="text-xl md:text-2xl text-green-900 mb-10 max-w-4xl">
-        Explore numerical methods like Bisection, Optimization, and Fixed-Point Iteration.
+      <p className="text-xl md:text-1xl text-green-900 mb-10 max-w-4xl">
+        Make your life easier with our Bisection Method Calculator! 
+      </p>
+      <p className="text-xl md:text-1xl text-green-900 mb-10 max-w-4xl">
+        This web application allows you to find roots of continuous functions quickly and accurately using the
+        Bisection Method. Whether you're a student, engineer, or enthusiast, our user-friendly
+        interface and step-by-step guidance will help you master numerical methods with ease.
       </p>
 
       {/* Button to calculator */}
