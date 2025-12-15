@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import { evaluate } from "mathjs";
 
-export default function FunctionPlot({ func, a, b, highlightX = null }) {
+// Added 'mode' prop
+export default function FunctionPlot({ func, a, b, highlightX = null, mode }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -99,22 +100,26 @@ export default function FunctionPlot({ func, a, b, highlightX = null }) {
     });
     ctx.stroke();
 
-    // ---------- HIGHLIGHT ROOT ----------
+    // ---------- HIGHLIGHT ROOT/MINIMIZER ----------
     if (highlightX !== null && isFinite(highlightX)) {
       try {
         const y = evaluate(func, { x: highlightX });
         const px = mapX(highlightX);
         const py = mapY(y);
+        
+        // Determine the correct label based on mode
+        const highlightLabel = (mode === 'optimal' || mode === 'gss') ? 'Minimizer' : 'Root';
 
         ctx.fillStyle = "red";
         ctx.beginPath();
         ctx.arc(px, py, 4, 0, 2 * Math.PI);
         ctx.fill();
 
-        ctx.fillText(`Root: (${highlightX.toFixed(4)}, ${y.toFixed(4)})`, px + 6, py - 6);
+        // Use the conditional label
+        ctx.fillText(`${highlightLabel}: (${highlightX.toFixed(4)}, ${y.toFixed(4)})`, px + 6, py - 6);
       } catch {}
     }
-  }, [func, a, b, highlightX]);
+  }, [func, a, b, highlightX, mode]); // Added 'mode' to dependency array
 
   return (
     <canvas

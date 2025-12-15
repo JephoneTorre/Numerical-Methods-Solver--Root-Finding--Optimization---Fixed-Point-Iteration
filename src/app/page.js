@@ -41,7 +41,7 @@ export default function HomePage() {
         )}
 
         {activeTab === "calculator" && (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
              <CalculatorContent />
           </div>
         )}
